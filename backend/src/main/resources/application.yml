@@ -1,0 +1,41 @@
+server:
+  port: ${PORT:8080}                 # Render provides PORT; locally it stays 8080
+
+spring:
+  application:
+    name: apexcms-backend
+  datasource:
+    # Supabase Transaction pooler (port 6543; prepareThreshold=0 is required for it). Host/user are not secrets, so they live here.
+    # (DB_URL / DB_USERNAME env vars can still override them, e.g. for Docker.)
+    url: ${DB_URL:jdbc:postgresql://aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require&prepareThreshold=0}
+    username: ${DB_USERNAME:postgres.cylbgjjkvbokkifhhuqg}
+    password: ${CM_PASSWORD}         # SECRET - environment variable only, never put it in this file
+    hikari:
+      maximum-pool-size: 3           # small pool: Supabase free tier has limited connections
+      connection-timeout: 10000      # fail after 10s instead of hanging for 30s
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update   # fine for a learning project; use Flyway migrations for real production data
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}            # REQUIRED, at least 32 characters. App refuses to start without it.
+    access-token-minutes: 30
+    refresh-token-days: 7
+  admin:                             # OPTIONAL seed. Normally leave unset and use POST /api/auth/setup instead.
+    name: ${ADMIN_NAME:Admin}
+    email: ${ADMIN_EMAIL:admin@portfolio.cms}
+    password: ${ADMIN_PASSWORD:}
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:5173}
+  upload:
+    dir: ${UPLOAD_DIR:uploads}
+  mail:
+    to: ${CONTACT_MAIL_TO:}          # leave blank to skip emails (messages are still saved)
+    from: ${MAIL_FROM:no-reply@apexcms.local}
+# To enable email set SPRING_MAIL_HOST, SPRING_MAIL_PORT, SPRING_MAIL_USERNAME, SPRING_MAIL_PASSWORD
