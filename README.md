@@ -4,6 +4,9 @@ A full-stack developer portfolio with its own **custom-built CMS**. The portfoli
 
 **Live demo:** https://apexcms-portfolio.vercel.app
 
+<!-- Add a screenshot: create docs/screenshot.png, then uncomment the next line -->
+<!-- ![Portfolio screenshot](docs/screenshot.png) -->
+
 ## Features
 
 **Public portfolio**
@@ -49,7 +52,7 @@ PostgreSQL  (Supabase)
 | Frontend | React 18, TypeScript, Vite, Tailwind CSS 4, lucide-react |
 | Backend | Java 21, Spring Boot 3.3, Spring Web, Spring Security, Spring Data JPA (Hibernate), Bean Validation |
 | Auth | JWT (jjwt), BCrypt |
-| Database | PostgreSQL (Supabase); H2 in-memory for the `dev` profile |
+| Database | PostgreSQL (Supabase) |
 | API docs | springdoc-openapi (Swagger UI) |
 | DevOps | Docker, Render (backend), Vercel (frontend) |
 
@@ -100,16 +103,7 @@ Full interactive docs: `/swagger-ui.html` on the running backend.
 
 ### 1. Backend
 
-Quick start with an in-memory database (no setup, data resets on every restart):
-
-```bash
-cd backend
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
-```
-
-The `dev` profile creates a throwaway admin (see `application-dev.yml`). Use it for local testing only.
-
-To run against your own PostgreSQL database, set these environment variables first:
+Run it against any PostgreSQL database (a local install, Docker, or a free Supabase project). Set these environment variables first:
 
 | Variable | Purpose |
 |---|---|
