@@ -5,14 +5,14 @@ spring:
   application:
     name: apexcms-backend
   datasource:
-    # Supabase Transaction pooler (port 6543; prepareThreshold=0 is required for it). Host/user are not secrets, so they live here.
-    # (DB_URL / DB_USERNAME env vars can still override them, e.g. for Docker.)
-    url: ${DB_URL:jdbc:postgresql://aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require&prepareThreshold=0}
-    username: ${DB_USERNAME:postgres.cylbgjjkvbokkifhhuqg}
-    password: ${CM_PASSWORD}         # SECRET - environment variable only, never put it in this file
+    # Neon PostgreSQL. All three come from environment variables, so nothing sensitive is in the repo.
+    # DB_URL format: jdbc:postgresql://<host>/<dbname>?sslmode=require
+    url: ${DB_URL:jdbc:postgresql://ep-holy-sky-b3lam2bx.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require}
+    username: ${DB_USERNAME:neondb_owner}
+    password: ${CM_PASSWORD}        # SECRET - environment variable only, never put it in this file
     hikari:
-      maximum-pool-size: 3           # small pool: Supabase free tier has limited connections
-      connection-timeout: 10000      # fail after 10s instead of hanging for 30s
+      maximum-pool-size: 3           # small pool: free tier has limited connections
+      connection-timeout: 20000      # allows time for Neon to wake from scale-to-zero
   jpa:
     open-in-view: false
     hibernate:
@@ -29,7 +29,7 @@ app:
     refresh-token-days: 7
   admin:                             # OPTIONAL seed. Normally leave unset and use POST /api/auth/setup instead.
     name: ${ADMIN_NAME:Admin}
-    email: ${ADMIN_EMAIL:admin@portfolio.cms}
+    email: ${ADMIN_EMAIL:}
     password: ${ADMIN_PASSWORD:}
   cors:
     allowed-origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:5173}
